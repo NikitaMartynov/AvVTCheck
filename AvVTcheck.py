@@ -9,13 +9,9 @@ import requests
 import time
 
 _vt_api_key = '5e16cd0891518a6fc36dbdf81bec50f26f4fa6c02666cd07af4d61f8d9b21d60'
-_ifile = 'VT_hits.csv'
-_ofile = 'VT_hits_processed.csv'
-_ipath = './'
-_opath = '/'
 
 _not_present_in_vt = "not present"
-_the_reference_vendor = "Microsoft"
+
 
 
 def rtrunc_at(s, d, n=1):
@@ -37,7 +33,7 @@ def get_vendors_detected(response_json):
 
 
 def query_report_on_hashes_from_vt():
-    print 'Pulling reports for all extracted hashes from virustotal:\n'
+    print 'Pulling reports on hashes from virustotal:\n'
     ifilename_full = _ifile
     ofilename_full = _ofile
     with open(ifilename_full, 'r') as fd:
@@ -73,7 +69,7 @@ def main():
     global _ofile
     global _columnHashes
     global _columnsTotal
-    _opath = os.getcwd() + _opath
+    global _the_reference_vendor
 
     # if not os.path.exists(_out_path):
     #     os.makedirs(_out_path)
@@ -84,6 +80,9 @@ def main():
                         help="Input file including path.")
     parser.add_argument('-o', '--output', default=False,
                         help="Output file including path. Default: ./VT_hashes_processed.csv")
+
+    parser.add_argument('-av', '--AVvendor', default=False,
+                        help="Select your AV vendor as it is named in VT. Default: Microsoft")
 
     parser.add_argument('-ch', '--columnHashes', type=int, default=False,
                         help="Specify number of the column with hashes")
@@ -98,6 +97,10 @@ def main():
         _ofile = args.output
     else:
         _ofile = './VT_hashes_processed.csv'
+    if bool(args.AVvendor):
+        _the_reference_vendor = args.AVvendor
+    else:
+        _the_reference_vendor = "Microsoft"
     if bool(args.columnHashes):
         _columnHashes = args.columnHashes
     else:
