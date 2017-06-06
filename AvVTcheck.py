@@ -52,7 +52,7 @@ def query_report_on_hashes_from_vt():
                     else:
                         detect = "Yes"
                     print_line = line.strip("\n") + "; {0:s}; {1:s}; {2:s}; {3:s}\n".format(detect,
-                                                              str(response_json['total']),
+                                                              str(response_json['positives']),
                                                               str(response_json['scan_date']),
                                                               vendors_detected)
                 else:
