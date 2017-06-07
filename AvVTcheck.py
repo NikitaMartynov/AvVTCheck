@@ -44,19 +44,19 @@ def query_report_on_hashes_from_vt():
                 response_json = response.json()
 
                 if response_json['response_code'] == 0:
-                    print_line = line.strip("\n") + "; {0:s}\n".format(_not_present_in_vt)
+                    print_line = line.strip("\r\n") + "; {0:s}\n".format(_not_present_in_vt)
                 elif response_json['response_code'] == 1:
                     vendors_detected = get_vendors_detected(response_json)
                     if _the_reference_vendor not in vendors_detected:
                         detect = "No"
                     else:
                         detect = "Yes"
-                    print_line = line.strip("\n") + "; {0:s}; {1:s}; {2:s}; {3:s}\n".format(detect,
+                    print_line = line.strip("\r\n") + "; {0:s}; {1:s}; {2:s}; {3:s}\n".format(detect,
                                                               str(response_json['positives']),
                                                               str(response_json['scan_date']),
                                                               vendors_detected)
                 else:
-                    print_line = line.strip("\n") + "{0:s} unexpected response code: {1:s}\n".format(line,
+                    print_line = line.strip("\r\n") + "{0:s} unexpected response code: {1:s}\n".format(line,
                                                                                 str(response_json['response_code']))
                 fd_out.write(print_line)
                 print print_line
