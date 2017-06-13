@@ -8,7 +8,7 @@ import requests
 
 import time
 
-_vt_api_key = '5e16cd0891518a6fc36dbdf81bec50f26f4fa6c02666cd07af4d61f8d9b21d60'
+_vt_api_key = ''
 
 _not_present_in_vt = "not present"
 
