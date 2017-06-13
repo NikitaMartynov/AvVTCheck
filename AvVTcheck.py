@@ -8,7 +8,7 @@ import requests
 
 import time
 
-_vt_api_key = ''
+_vt_api_key = '5e16cd0891518a6fc36dbdf81bec50f26f4fa6c02666cd07af4d61f8d9b21d60'
 
 _not_present_in_vt = "not present"
 
@@ -75,42 +75,35 @@ def main():
     #     os.makedirs(_out_path)
 
     parser = argparse.ArgumentParser(prog='AvVTcheck', description='Checks hashes at VT against your selected AV.',
-                                     epilog='Takes as input ";" separated file.')
-    parser.add_argument('-i', '--input', default=True,
-                        help="Input file including path.")
-    parser.add_argument('-o', '--output', default=False,
-                        help="Output file including path. Default: ./VT_hashes_processed.csv")
+                                     epilog='Takes as input ";" separated csv file.')
+    parser.add_argument('-i', '--input', default=False,
+                        help="Mandatory: Input file including path.")
+    parser.add_argument('-o', '--output', default='./VT_hashes_processed.csv',
+                        help="Optional: Output file including path. Default: ./VT_hashes_processed.csv")
 
-    parser.add_argument('-av', '--AVvendor', default=False,
-                        help="Select your AV vendor as it is named in VT. Default: Microsoft")
+    parser.add_argument('-av', '--AVvendor', default="Microsoft",
+                        help="Optional: Select your AV vendor as it is named in VT. Default: Microsoft")
 
-    parser.add_argument('-ch', '--columnHashes', type=int, default=False,
-                        help="Specify number of the column with hashes")
+    parser.add_argument('-ch', '--columnHashes', type=int, default=4,
+                        help="Optional: Specify number of the column with hashes. Default = 4")
 
-    parser.add_argument('-ct', '--columnsTotal', type=int, default=False,
-                        help="Specify number of columns in total")
+    parser.add_argument('-ct', '--columnsTotal', type=int, default=5,
+                        help="Optional: Specify number of columns in total. Default = 5")
     args = parser.parse_args()
 
-    if bool(args.input):
-        _ifile = args.input
     if bool(args.output):
         _ofile = args.output
-    else:
-        _ofile = './VT_hashes_processed.csv'
     if bool(args.AVvendor):
         _the_reference_vendor = args.AVvendor
-    else:
-        _the_reference_vendor = "Microsoft"
     if bool(args.columnHashes):
         _columnHashes = args.columnHashes
-    else:
-        _columnHashes = 4
     if bool(args.columnsTotal):
         _columnsTotal = args.columnHashes
+    if bool(args.input):
+        _ifile = args.input
+        query_report_on_hashes_from_vt()
     else:
-        _columnsTotal = 5
-
-    query_report_on_hashes_from_vt()
+        print "Invalid arguments, see help: AcVTcheck.py -h"
 
 
 if __name__ == "__main__":
