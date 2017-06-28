@@ -24,6 +24,19 @@ def ltrunc_at(s, d, n=1):
     return d.join(s.split(d)[n:])
 
 
+def get_hash(line, ch, ct):
+    if ch == ct:
+        hash_val = ltrunc_at(line, ';', _columnHashes - 1)
+    elif ch > ct:
+        print exit("You cannot have parameter ch > ct. Make sure to type the input which makes sense!")
+    else:
+        hash_val = ltrunc_at(rtrunc_at(line, ';', _columnsTotal - 1), ';', _columnHashes - 1)
+    if not hash_val.strip("\r\n"):
+        print exit("Please verify your input. It seems that column #{0:s} has empty cells. All rows in this column "
+                   "should have hashes".format(str(_columnHashes)))
+    return hash_val
+
+
 def get_vendors_detected(response_json):
     detected_vendors = ''
     for vendor in response_json['scans']:
@@ -39,7 +52,8 @@ def query_report_on_hashes_from_vt():
     with open(ifilename_full, 'r') as fd:
         with open(ofilename_full, 'wb') as fd_out:
             for line in fd.readlines():
-                params = {'apikey': _vt_api_key, 'resource': ltrunc_at(rtrunc_at(line, ';', 4), ';', 3)}
+                hash_val = get_hash(line, _columnHashes, _columnsTotal)
+                params = {'apikey': _vt_api_key, 'resource': hash_val}
                 response = requests.get('https://www.virustotal.com/vtapi/v2/file/report', params=params)
                 response_json = response.json()
 
@@ -98,7 +112,7 @@ def main():
     if bool(args.columnHashes):
         _columnHashes = args.columnHashes
     if bool(args.columnsTotal):
-        _columnsTotal = args.columnHashes
+        _columnsTotal = args.columnsTotal
     if bool(args.input):
         _ifile = args.input
         query_report_on_hashes_from_vt()
