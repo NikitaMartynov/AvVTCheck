@@ -54,7 +54,10 @@ def query_report_on_hashes_from_vt():
             for line in fd.readlines():
                 hash_val = get_hash(line, _columnHashes, _columnsTotal)
                 params = {'apikey': _vt_api_key, 'resource': hash_val}
-                response = requests.get('https://www.virustotal.com/vtapi/v2/file/report', params=params)
+                try:
+                    response = requests.get('https://www.virustotal.com/vtapi/v2/file/report', params=params)
+                except:
+                    print exit("Failed to connect to VT. Check your internet connection.")
                 response_json = response.json()
 
                 if response_json['response_code'] == 0:
